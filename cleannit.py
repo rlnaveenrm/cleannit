@@ -2,15 +2,14 @@ import praw
 from prawoauth2 import PrawOAuth2Server
 from prawoauth2 import PrawOAuth2Mini
 from tkinter import *
-
-
+from tkinter import messagebox
 
 def oAuth():
     global MESSAGE
     global TOKENS 
     global USER
     global ENTRY
-    user_agent = 'Cleannit by u/rlnaveenrm'
+    user_agent = 'Cleannit by /u/rlnaveenrm'
     reddit_client = praw.Reddit(user_agent=user_agent)
     scopes = ['identity', 'read', 'submit', 'history', 'edit']
     oauthserver = PrawOAuth2Server(reddit_client, app_key="gqNezasru70jDg",
@@ -35,6 +34,11 @@ def deleteMessage():
     for comment in USER.get_comments(limit=None):
         comment.delete()
 
+def instructions():
+    messagebox.showinfo("Read carefully", """Reddit stores the last edited version of your comments on their server even after you have deleted them.To protect yourself from your online identity you can either :
+    EDIT - This will replace all your comments with the message you have entered
+    DELETE - This will first replace all your comments with the message and then delete all your comments """)
+
 top = Tk()
 top.wm_title("CLEANNIT by /u/rlnaveenrm")
 label = Label(top, text="Enter message to replace your comments with")
@@ -43,7 +47,7 @@ ENTRY = Text(top, height= 10, width=40)
 ENTRY.config(wrap = WORD)
 ENTRY.pack(side = TOP, padx =10, pady = 10)
 ENTRY.insert(END, """This comment has been overwritten by a bot for privacy reasons. Check out http://github.com for the windows executable or the python script""")
-button0 = Button(top, text ="Instructions", command = editMessage)
+button0 = Button(top, text ="Instructions", command = instructions)
 button0.config(width = 12)
 button0.pack(side = LEFT, padx = 10, pady = 10)
 button1 = Button(top, text ="Edit", command = editMessage)
